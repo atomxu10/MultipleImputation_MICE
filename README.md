@@ -11,5 +11,9 @@ The objective of this project is to compare the effectiveness of two different a
 
 ## Content
 - [Data](#1)
-- [Methodology](#2)
-- [Data exploration (Daily data)](#3)
+- [Model](#2)
+- [Exploratory data analysis](#3)
+- [Method](#4)
+- [Convergence of the MICE algorithm](#5)
+- [Results](#6)
+- [Conclusion](#7)
