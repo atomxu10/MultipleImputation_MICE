@@ -11,7 +11,7 @@ The objective of this project is to compare the effectiveness of two different a
 
 ## Content
 - [Data](#1)
-- [Model](#2)
+- [Model (Multiple Linear Regression)](#2)
 - [Exploratory data analysis](#3)
 - [Method](#4)
 - [Convergence of the MICE algorithm](#5)
@@ -29,5 +29,11 @@ The variables are :
 - Visibility (VIS): The visibility in meters.
 - Dew point temperature (DP): The dew point temperature is Celsius.
 - Solar radiation (SR): The solar radiation in MJ/m2.
+
 All variables data types are continuous.
+
+## Model (Multiple Linear Regression)
+Multiple Linear Regression is a regression analysis method used to establish a linear relationship between multiple independent variables and a dependent variable, and all variables are numerical variables. In this case, all variable categories are continuous, so linear regression can be used to explain the relationship between variables, RBC is defined as an independent variable, and the others are dependent variables. The regression model can be expressed as:
+
+Yi =β0 +β1X1i +β2X2i +β3X3i +β4X4i +β5X5i +β6X6i +εi
 
