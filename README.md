@@ -101,6 +101,28 @@ Each variable has its own density curve, which roughly displays a normal distrib
 
 <p align="center">Figure 3: Density plots for each variable (m = 5,maxit = 20). the overlapping degree is higher so it is convergent</p>
 
+## Result
+Linear regression fit with different data sets:
+
+- Model 1: the full data set (no missing data)
+- Model 2: the modified dataset (proportions of missing data = 0.05)
+- Model 3: the modified dataset (proportions of missing data = 0.05) and multiple imputation with MICE (method: “norm”)
+- Model 4: the modified dataset (proportions of missing data = 0.05) and multiple imputation with MICE (method: “pmm”)
+- Model 5: the modified dataset (proportions of missing data = 0.4) and multiple imputation with MICE (method: “norm”)
+- Model 6: the modified dataset (proportions of missing data = 0.4) and multiple imputation with MICE (method: “pmm”)
+
+<div align="center">
+    <img src="plot/t1.png" width="700px" alt="Table 1">
+</div>
+
+<p align="center">Table 1: Estimates and Standard errors of each parameter in different models</p>
+
+
+
+
+
+
+
 
 
 
