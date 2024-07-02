@@ -112,11 +112,16 @@ Linear regression fit with different data sets:
 - Model 6: the modified dataset (proportions of missing data = 0.4) and multiple imputation with MICE (method: “pmm”)
 
 <div align="center">
-    <img src="plot/t1.png" width="600px" alt="Table 1">
+    <img src="plot/t1.png" width="650px" alt="Table 1">
 </div>
 
 <p align="center">Table 1: Estimates and Standard errors of each parameter in different models</p>
 
+Table 1 displays the regression coefficients and standard errors for each parameter across different models. It is observed that most parameter estimates for Model 3 and Model 4 fall between those of Model 1 and Model 2. The parameters obtained by imputing missing values are “closer” to those derived from the full data set.
+
+Model 1, which uses complete observations, has the smallest standard errors for each parameter, indicating a more precise estimation. In contrast, Model 2, which involves simply deleting incomplete data, exhibits the largest standard errors for its parameters. This suggests that the approach of merely omitting missing data leads to a less reliable model fit.
+
+The standard errors for the parameters in Model 3 and Model 4, which utilize multiple imputation with the MICE algorithm, are significantly lower than those in Model 2. This indicates that multiple imputation can effectively reduce the standard errors of the parameters, thereby improving the model fit. The improvement in the fitting effect of the models using multiple imputation is noteworthy, highlighting the efficacy of this approach in handling missing data.
 
 
 
