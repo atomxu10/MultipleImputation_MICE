@@ -101,7 +101,7 @@ Each variable has its own density curve, which roughly displays a normal distrib
 
 <p align="center">Figure 3: Density plots for each variable (m = 5,maxit = 20). the overlapping degree is higher so it is convergent</p>
 
-## Result
+## Results
 Linear regression fit with different data sets:
 
 - Model 1: the full data set (no missing data)
@@ -119,10 +119,13 @@ Linear regression fit with different data sets:
 
 Table 1 displays the regression coefficients and standard errors for each parameter across different models. It is observed that most parameter estimates for Model 3 and Model 4 fall between those of Model 1 and Model 2. The parameters obtained by imputing missing values are “closer” to those derived from the full data set.
 
-Model 1, which uses complete observations, has the smallest standard errors for each parameter, indicating a more precise estimation. In contrast, Model 2, which involves simply deleting incomplete data, exhibits the largest standard errors for its parameters. This suggests that the approach of merely omitting missing data leads to a less reliable model fit.
+Model 1, which uses complete observations, has the smallest standard errors for each parameter, indicating a more precise estimation. In contrast, Model 2, which involves simply deleting incomplete data, exhibits the largest standard error for its parameters. This suggests that the approach of merely omitting missing data leads to a less reliable model fit.
 
 The standard errors for the parameters in Model 3 and Model 4, which utilize multiple imputation with the MICE algorithm, are significantly lower than those in Model 2. This indicates that multiple imputation can effectively reduce the standard errors of the parameters, thereby improving the model fit. The improvement in the fitting effect of the models using multiple imputation is noteworthy, highlighting the efficacy of this approach in handling missing data.
 
+Table 1 compares different imputation methods (“norm” and “pmm”), revealing key insights into their effectiveness. It is observed that the parameter estimates in Model 4, which employs the “pmm” method, are “closer” to those in Model 1 compared to Model 3, which uses the “norm” method. Additionally, the standard errors of the parameters in Model 4 are smaller than those in Model 3, indicating that the “pmm” imputation method provides a better fit for the dataset when the proportion of missing data is 0.05.
+
+However, as the proportion of missing data increases to 0.4, the situation changes. In this case, using multiple imputations with the MICE algorithm and the “norm” method results in a better model fit compared to using the “pmm” method. This demonstrates that while “pmm” is effective for lower proportions of missing data, the “norm” method becomes more reliable as the amount of missing data increases.
 
 
 
