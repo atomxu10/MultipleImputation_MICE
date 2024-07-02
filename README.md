@@ -23,3 +23,11 @@ SeoulBikeData ([databike.csv](https://github.com/atomxu10/MultipleImputation_MIC
 
 The variables are :
 - Rented Bike Count (RBC): The number of bikes rented per hour.
+- Temperature (TEMP): The temperature in Celsius.
+- Humidity (HUM): The relative humidity.
+- Wind speed (WS): The wind speed in meters per second.
+- Visibility (VIS): The visibility in meters.
+- Dew point temperature (DP): The dew point temperature is Celsius.
+- Solar radiation (SR): The solar radiation in MJ/m2.
+All variables data types are continuous.
+
