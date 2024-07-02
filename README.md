@@ -41,4 +41,6 @@ $$
 
 where $$(\epsilon \sim N(0, \sigma^2)\)$$
 
+hi $$Y_i$$ hi
+
 
