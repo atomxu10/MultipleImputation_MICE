@@ -78,11 +78,11 @@ By checking the convergence of the MICE algorithm after using different methods,
 
 **5. Fitting linear regression model using the data set after MICE multiple imputation**
 
-    Fitting the data set after MICE multiple imputation to a linear regression model to obtain the fitted models (the number of models is the number of imputations). Pooling our analyses together from multiple models (pool function) as the final fitting model. Estimated values and standard errors of each parameter would be obtained.
+   Fitting the data set after MICE multiple imputation to a linear regression model to obtain the fitted models (the number of models is the number of imputations). Pooling our analyses together from multiple models (pool function) as the final fitting model. Estimated values and standard errors of each parameter would be obtained.
 
 **6. Trying different proportions of missing data**
     
-    Trying to change the proportions of missing values in step 2, repeat the steps from 3 to 5 to get new model parameters, and comparing the estimated values and standard errors of each parameter of each model.
+   Trying to change the proportions of missing values in step 2, repeat the steps from 3 to 5 to get new model parameters, and comparing the estimated values and standard errors of each parameter of each model.
     
 
 
