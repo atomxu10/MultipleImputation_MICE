@@ -112,7 +112,7 @@ Linear regression fit with different data sets:
 - Model 6: the modified dataset (proportions of missing data = 0.4) and multiple imputation with MICE (method: “pmm”)
 
 <div align="center">
-    <img src="plot/t1.png" width="700px" alt="Table 1">
+    <img src="plot/t1.png" width="600px" alt="Table 1">
 </div>
 
 <p align="center">Table 1: Estimates and Standard errors of each parameter in different models</p>
