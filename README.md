@@ -68,6 +68,7 @@ The missing data are completely random, which belongs to the MCAR type of missin
    Complete case analysis is a linear regression fitting using the modified data directly. During linear regression in R, observations with missing values would be removed. In this case, 89 observations will be deleted.
 
 **4. Multiple imputation with the MICE algorithm**
+   
    Multiple imputation with the MICE algorithm is a technique for imputing missing data that involves generating multiple datasets by using regression models to estimate missing values. The MICE algorithm is widely used because it can handle different types of variables and missing data patterns. The methods “norm” and “pmm” in the MICE package will be used.
 
    - “norm” - Assuming the distribution of the data is a normal distribution and using the mean and variance to generate random values from that distribution.
@@ -75,7 +76,14 @@ The missing data are completely random, which belongs to the MCAR type of missin
 
 By checking the convergence of the MICE algorithm after using different methods, we can get the number of imputations and iterations.
 
+**5. Fitting linear regression model using the data set after MICE multiple imputation**
 
+    Fitting the data set after MICE multiple imputation to a linear regression model to obtain the fitted models (the number of models is the number of imputations). Pooling our analyses together from multiple models (pool function) as the final fitting model. Estimated values and standard errors of each parameter would be obtained.
+
+**6. Trying different proportions of missing data**
+    
+    Trying to change the proportions of missing values in step 2, repeat the steps from 3 to 5 to get new model parameters, and comparing the estimated values and standard errors of each parameter of each model.
+    
 
 
 
