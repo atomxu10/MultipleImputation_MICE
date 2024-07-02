@@ -49,7 +49,7 @@ After modifying the dataset to have missing data (proportions of missing data = 
 The missing data are completely random, which belongs to the MCAR type of missing data mechanisms and the missing data is not affected by any other variables.
 
 <div align="center">
-    <img src="plot/mdp.png" width="500px" alt="Figure 1">
+    <img src="plot/mdp.png" width="200px" alt="Figure 1">
 </div>
 
 <p align="center">Figure 1: Missing data pattern of the dataset</p>
