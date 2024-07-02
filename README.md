@@ -41,5 +41,6 @@ $$
 
 where $\epsilon \sim N(0, \sigma^2)\$
 
+In above formula, $Y_i$ is the value of the independent variable RBC, $X_{1i}$. . . $X_{6i}$ represent the values of the dependent variables TEMP, HUM, WS, VIS, DPT, SR respectively, and $\beta_1$. . . $\beta_6$ represent the coefficients of each dependent variables
 
 
