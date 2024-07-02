@@ -39,7 +39,7 @@ $$
 Y_i = \beta_0 + \beta_1 X_{1i} + \beta_2 X_{2i} + \beta_3 X_{3i} + \beta_4 X_{4i} + \beta_5 X_{5i} + \beta_6 X_{6i} + \epsilon_i
 $$
 
-where $(\epsilon \sim N(0, \sigma^2)\)$
+where $\epsilon \sim N(0, \sigma^2)\$
 
 
 
