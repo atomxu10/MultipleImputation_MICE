@@ -90,13 +90,13 @@ When using multiple imputation with the MICE algorithm, checking converges can d
 Each variable has its own density curve, which roughly displays a normal distribution curve. If converges, the density curve after each iteration will not change much, and the shapes tend to coincide. Figure 2 and Figure 3 are density plots with iterations of 1 and 20 respectively (the number of interpolations is 5). By comparison, it is seen that the red line distribution in Figure 3 is roughly bell-shaped compared with Figure 2, and the overlapping degree is higher. Therefore, it can be concluded that the convergence performance is good when the number of iterations is 20.
 
 <div align="center">
-    <img src="plot/f2.png" width="500px" alt="Figure 2">
+    <img src="plot/f2.png" width="700px" alt="Figure 2">
 </div>
 
 <p align="center">Figure 2: Density plots for each variable (m = 5,maxit = 1). the overlapping degree is lower</p>
 
 <div align="center">
-    <img src="plot/f3.png" width="500px" alt="Figure 3">
+    <img src="plot/f3.png" width="700px" alt="Figure 3">
 </div>
 
 <p align="center">Figure 3: Density plots for each variable (m = 5,maxit = 20). the overlapping degree is higher so it is convergent</p>
