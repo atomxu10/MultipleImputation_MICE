@@ -41,6 +41,26 @@ $$
 
 where $\epsilon \sim N(0, \sigma^2)\$
 
-In above formula, $Y_i$ is the value of the independent variable RBC, $X_{1i}$. . . $X_{6i}$ represent the values of the dependent variables TEMP, HUM, WS, VIS, DPT, SR respectively, and $\beta_1$. . . $\beta_6$ represent the coefficients of each dependent variables
+In the above formula, $Y_i$ is the value of the independent variable RBC, $X_{1i}$. . . $X_{6i}$ represent the values of the dependent variables TEMP, HUM, WS, VIS, DPT, SR respectively, and $\beta_1$. . . $\beta_6$ represent the coefficients of each dependent variable.
+
+## Exploratory data analysis
+After modifying the dataset to have missing data (proportions of missing data = 0.05), it can be seen that 208 observations are complete, accounting for 70% of the total data (Figure 1). Each variable in the data set has missing values, among which the variable with the most missing values is SR (20), and the least is VIS (10). Among all observations with missing values, there are 72 observations with missing single variables, accounting for 80.9%. There are 16 observations with two variables missing and 1 observation with three variables missing.
+
+The missing data are completely random, which belongs to the MCAR type of missing data mechanisms and the missing data is not affected by any other variables.
+
+<div align="center">
+    <img src="plot2/mdp.png" width="500px" alt="Figure 1">
+</div>
+
+<p align="center">Figure 1: Missing data pattern of the dataset</p>
+
+
+
+
+
+
+
+
+
 
 
