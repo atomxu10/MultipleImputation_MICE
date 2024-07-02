@@ -127,9 +127,15 @@ Table 1 compares different imputation methods (“norm” and “pmm”), reveal
 
 However, as the proportion of missing data increases to 0.4, the situation changes. In this case, using multiple imputations with the MICE algorithm and the “norm” method results in a better model fit compared to using the “pmm” method. This demonstrates that while “pmm” is effective for lower proportions of missing data, the “norm” method becomes more reliable as the amount of missing data increases.
 
+## Conclusion
 
+The model that fits the complete dataset contains the most information about the data, resulting in superior model interpretation. In this scenario, the dataset with no missing data has the smallest standard errors for its parameters, leading to more effective data interpretation.
 
+There are various ways to handle missing data. Directly ignoring missing values and performing linear regression will exclude any rows with missing values, which reduces the sample size. This is particularly problematic when the proportion of missing data is large, as it leaves fewer valid observations and thus less information. Consequently, the model exhibits poor fit and high standard errors for each parameter.
 
+By comparing the estimated values and standard errors of the parameters for each model, it is evident that using the MICE missing value imputation method improves model fitting. The choice of imputation method is crucial for datasets with different proportions of missing data. In this case, when the proportion of missing values is small, the standard errors of the parameters fitted using the "pmm" method are smaller. However, as the proportion of missing values increases and the number of complete observations decreases, the dataset processed with the "norm" method results in a better model fit.
+
+In summary, selecting the appropriate imputation method based on the proportion of missing data is vital for achieving accurate model fitting and reliable parameter estimates.
 
 
 
