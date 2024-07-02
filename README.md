@@ -17,3 +17,6 @@ The objective of this project is to compare the effectiveness of two different a
 - [Convergence of the MICE algorithm](#5)
 - [Results](#6)
 - [Conclusion](#7)
+
+## Data
+SeoulBikeData ([databike.csv](https://github.com/atomxu10/MultipleImputation_MICE/blob/main/databike.csv)) is a dataset containing information about bike rentals in Seoul, South Korea. The dataset is provided by the Seoul Metropolitan Government, and there are 297 datasets in total, which can be used for data analysis and prediction.
