@@ -1,0 +1,260 @@
+---
+title: "xxx"
+author: "xxx"
+date: "xxx"
+output: pdf_document
+fontsize: 11pt
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      message = FALSE,
+                      warning = FALSE)
+```
+
+```{r,include=FALSE}
+# enviornment 
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(gridExtra)
+library(knitr)
+library(mice)
+library(kableExtra)
+```
+
+```{r,include=FALSE}
+# data cleaning
+data_full<-read_csv('databike.csv')
+names(data_full)[1] <- "RBC"
+names(data_full)[2] <- "TEMP"
+names(data_full)[3] <- "HUM"
+names(data_full)[4] <- "WS"
+names(data_full)[5] <- "VIS"
+names(data_full)[6] <- "DPT"
+names(data_full)[7] <- "SR"
+
+makeMissing <- function(mydf, probMissing){
+  # mydf: your data frame
+  # probMissing: the probability that any single
+  #  element of the data frame will be changed to NA
+  R <- matrix(rbinom(nrow(mydf) * ncol(mydf),
+                     1,
+                     probMissing),
+              nrow = nrow(mydf),
+              ncol = ncol(mydf))
+  mydf[R == 1] <- NA
+mydf }
+set.seed(992)
+data_modified <- makeMissing(data_full,0.05)
+data_modified2 <- makeMissing(data_full,0.4)
+```
+
+# 1. The data
+SeoulBikeData is a dataset containing information about bike rentals in Seoul, South Korea. The dataset is provided by the Seoul Metropolitan Government, and there are 297 datasets in total, which can be used for data analysis and prediction.
+
+The variables are :
+
+• Rented Bike Count (RBC): The number of bikes rented per hour.
+
+• Temperature (TEMP): The temperature in Celsius.
+
+• Humidity (HUM): The relative humidity.
+
+• Wind speed (WS): The wind speed in meters per second.
+
+• Visibility (VIS): The visibility in meters.
+
+• Dew point temperature (DP): The dew point temperature in Celsius.
+
+• Solar radiation (SR): The solar radiation in MJ/m2.
+
+All variables data types are continuous.
+
+# 2. The model
+Multiple Linear Regression is a regression analysis method used to establish a linear relationship between multiple independent variables and a dependent variable, and all variables are numerical variables. In this case, all variable categories are continuous, so linear regression can be used to explain the relationship between variables, RBC is defined as an independent variable, and the others are dependent variables. The regression model can be expressed as: 
+$$Y_{i}=\beta_{0}+\beta_{1} X_{1 i}+\beta_{2} X_{2 i}+\beta_{3} X_{3 i}+ \beta_{4} X_{4 i}+\beta_{5} X_{5 i}+\beta_{6} X_{6 i}+\epsilon_{i} $$ where    $\epsilon \sim N\left(0, \sigma^{2}\right)$
+
+In above formula, $Y_{i}$ is the value of the independent variable RBC, $X_{1 i}$...$X_{6 i}$ represent the values of the dependent variables TEMP, HUM, WS, VIS, DPT, SR respectively, and $\beta_{1}$...$\beta_{6}$ represent the coefficients of each dependent variables
+```{r include=FALSE}
+fit_data_full <- lm(RBC ~ TEMP + HUM + WS + VIS + DPT + SR, data=data_full) # linear model(full data set)
+summary(fit_data_full)
+fit_data_modified <- lm(RBC ~ TEMP + HUM + WS + VIS + DPT + SR, data=data_modified) # linear model(modified data set)
+summary(fit_data_modified)
+
+data_imp0 <- mice(data_modified,  m = 5,maxit = 1,method = 'norm', print = F)
+data_imp <- mice(data_modified,  m = 5, maxit = 20,method = 'norm', print = F)
+data_imp2 <- mice(data_modified,  m = 5, maxit = 20,method = 'pmm', print = F)
+data_imp_2 <- mice(data_modified2,  m = 5, maxit = 20,method = 'norm', print = F)
+data_imp2_2 <- mice(data_modified2,  m = 5, maxit = 20,method = 'pmm', print = F)
+densityplot(data_imp0)
+densityplot(data_imp) #density plot check convergence
+densityplot(data_imp2)
+plot(data_imp,which = "deviance") # normal checking
+fit_data_imp <- with(data_imp, lm(RBC ~ TEMP + HUM + WS + VIS + DPT + SR)) # linear model(modified data set with MICE(norn))
+fit_data_imp2 <- with(data_imp2, lm(RBC ~ TEMP + HUM + WS + VIS + DPT + SR)) # linear model(modified data set with MICE(pmm))
+
+fit_data_pool <- pool(fit_data_imp) #norm
+summary(fit_data_pool)
+fit_data_pool2 <- pool(fit_data_imp2) #pmm
+summary(fit_data_pool2)
+
+# model5 & model6
+fit_data_imp_2 <- with(data_imp_2, lm(RBC ~ TEMP + HUM + WS + VIS + DPT + SR)) # model5
+fit_data_imp2_2 <- with(data_imp2_2, lm(RBC ~ TEMP + HUM + WS + VIS + DPT + SR)) # model6
+fit_data_pool_model5 <- pool(fit_data_imp_2) #norm
+summary(fit_data_pool_model5)
+fit_data_pool_model6 <- pool(fit_data_imp2_2) #pmm
+summary(fit_data_pool_model6)
+```
+
+
+\newpage
+# 3. Exploratory data analysis
+After modifying the dataset to have missing data (proportions of missing data = 0.05), it can be seen that 208 observations are complete, accounting for 70% of the total data (Figure 1). Each variable in the data set has missing values, among which the variable with the most missing values is SR (20), the least is VIS (10). Among all observations with missing values, there are 72 observations with missing single variables, accounting for 80.9%. There are 16 observations with two variables missing and 1 observation with three variables missing. 
+
+The missing data are completely random, which belongs to the MCAR type of missing data mechanisms that the missing data is not affected by any other variables. We will implement the MICE algorithm on this dataset.
+```{r echo=FALSE, fig.align="center", fig.height=8, fig.width=14}
+A <- md.pattern(data_modified, plot = TRUE) # Missingness pattern of the dataset
+```
+\begin{center}
+Figure 1: Missing data pattern of the dataset. The missing data mechanism is MCAR. Source: SeoulBikeData.
+\end{center}
+
+# 4. Method
+1. Fitting a benchmark model
+
+The full data set (without missing values) is fitted with a linear regression model to obtain the estimated values and standard errors of each parameter. The model does not need to consider multicollinearity. It is only used for subsequent comparative analysis.
+\newpage
+
+2. Modifying the data set to have missing data
+
+A seed number should be set so that missing data is constant in order to compare multiple models. Modifying the full data set according to 0.05 proportions of missing data, and generate a new data set (208 complete observations in the modified data set).
+
+3. Complete case analysis
+
+Complete case analysis is a linear regression fitting using the modified data directly. During linear regression in R, observations with missing values would be removed. In this case, 89 observations will be deleted.
+
+4. Multiple imputation with the MICE algorithm 
+
+Multiple imputation with the MICE algorithm is a technique for imputing missing data that involves generating multiple datasets by using regression models to estimate missing values. The MICE algorithm is widely used because it can handle different types of variables and missing data patterns. The methods "norm" and "pmm" in the MICE package will be used.
+
+• “norm”  - Assuming the distribution of the data is a normal distribution and using the mean and variance to generate random values from that distribution.
+
+• “pmm”  - Missing values are assumed to have similar characteristics to other data points. When selecting similar data points, the difference between these data points and the missing value is calculated, and the value of the closest data point is selected according to the size of the difference to fill the missing value.
+
+Checking convergence of the MICE algorithm after using different methods, then we can get the number of imputations and iterations.
+
+5. Fitting linear regression model using the data set after MICE multiple imputation
+
+Fitting the data set after MICE multiple imputation to a linear regression model to obtain the fitted models (the number of models is the number of imputations). Pooling our analyses together from multiple models (pool function) as the final fitting model. Estimated values and standard errors of each parameter would be obtained.
+
+6. Trying different proportions of missing data
+
+Trying to change the proportions of missing values in step 2, repeat the steps from 3 to 5 to get new model parameters, and comparing the estimated values and standard errors of each parameter of each model.
+
+
+# 5. Convergence of the MICE algorithm
+When using multiple imputation with the MICE algorithm, checking converges can determine whether the number of iterations of the imputation and the number of imputations are sufficient. If there is no convergence, it means that the number of imputations and iterations need to be increased. I will use the density plot as an example to check convergence.
+
+Each variable has its own density curve, which roughly displays a normal distribution curve. If converges, the density curve after each iteration will not change much, and the shapes tend to coincide. Figure2 and Figure3 are density plot with iterations of 1 and 20 respectively (the number of interpolations is 5). By comparison, it is seen that the red line distribution in Figure3 is roughly bell-shaped compared with Figure2, and the overlapping degree is higher. Therefore, it can be concluded that the convergence performance is good when the number of iterations is 20.
+\
+
+```{r fig.height=4, fig.width=12}
+densityplot(data_imp0)
+```
+\begin{center}
+Figure 2: Density plots for each variable (m = 5,maxit = 1). the overlapping degree is lower.
+\end{center}
+```{r fig.height=4, fig.width=12}
+densityplot(data_imp)
+```
+\begin{center}
+Figure 3: Density plots for each variable (m = 5,maxit = 20). the overlapping degree is higher so it is convergent.
+\end{center}
+
+# 6. Results
+Linear regression fit with different data sets
+\newpage
+
+\begin{center}
+Table 1: Estimates and Standard errors of each parameters in different models
+\end{center}
+
+• Model 1: the full data set (no missing data)
+
+• Model 2: the modified dataset (proportions of missing data = 0.05)
+
+• Model 3: the modified dataset (proportions of missing data = 0.05) and multiple imputation with MICE (method: “norm”)
+
+• Model 4: the modified dataset (proportions of missing data = 0.05) and multiple imputation with MICE (method: “pmm”)
+
+• Model 5: the modified dataset (proportions of missing data = 0.4) and multiple imputation with MICE (method: “norm”)
+
+• Model 6: the modified dataset (proportions of missing data = 0.4) and multiple imputation with MICE (method: “pmm”)
+
+```{r include=FALSE}
+compared_std1 <- c(387.939,13.747,4.474,18.512,0.038,14.753,30.517)
+compared_std2 <- c(455.383,16.448,5.241,22.574,0.046,17.575,39.073)
+compared_std3 <- c(420.094,15.527,4.856,20.163,0.039,16.567,32.913)
+compared_std4 <- c(406.796,14.332,4.746,19.112,0.039,15.525,32.266)
+compared_std5 <- c(689.250,24.222,7.534,45.972,0.067,25.420,63.298)
+compared_std6 <- c(1089.326,31.121,12.716,51.265,0.088,36.299,83.234)
+est5 <- c(1122.35,-19.74,-11.12,-67.15, 0.04,35.63,193.77)
+est6 <- c(182.27,12.83,-0.87,-45.08,0.06,-0.77,196.31)
+compared_coefficients <- fit_data_full$coefficients %>% cbind(compared_std1)%>% cbind(fit_data_modified$coefficients) %>% cbind(compared_std2) %>% cbind(fit_data_pool$pooled$estimate)%>% cbind(compared_std3) %>% cbind(fit_data_pool2$pooled$estimate)%>% cbind(compared_std4)%>% cbind(est5)%>% cbind(compared_std5)%>% cbind(est6)%>% cbind(compared_std6)%>% round( digits = 3)
+colnames(compared_coefficients) <- c("Estimates","Standard errors", "Estimates","Standard errors", "Estimates","Standard errors", "Estimates","Standard errors", "Estimates 5","Standard errors 5", "Estimates 6","Standard errors 6")
+compared_coefficients <- t(compared_coefficients)
+
+kbl1 <- kbl(compared_coefficients, booktabs = T) %>%
+    kable_styling(bootstrap_options = c("condensed", "bordered"), position = "center",
+                font_size = 8, full_width = F, latex_options = "scale_down") %>%
+  pack_rows(index = c("Model 1" = 2,
+                      "Model 2" = 2,
+                      "Model 3" = 2,
+                      "Model 4" = 2,
+                      "Model 5" =2,
+                      "Model 6" = 2))
+```
+
+```{r}
+kbl1
+```
+
+
+Table 1 shows the regression coefficients and standard error of each parameter in different models, most of the parameter estimates of Model 3 and Model 4 are between Model 1 and Model 2. The model parameters by imputing missing values are "closer" to the parameters of the full data set. The observations of Model 1 are complete and the standard error of each parameter in Model 1 is the smallest of all models. The largest standard error of each parameter are in Model 2, which indicated the model that only deletes the data fitted cannot better fit the model. The standard errors of the parameters in Model 3 and Model 4 are lower than those in Model 2, which can be seen that the fitting effect of the model after using multiple imputation with MICE can effectively reduce the standard error of the each parameters, and the improvement of the fitting effect of the model is significant.
+
+Comparing different imputation methods ("norm" and "pmm"), it can be seen from Table 1 that the multiple variable parameter estimates in Model 4 are “closer” to Model 1 than Model 3. The standard errors of the parameters of Model 4 are smaller than those of Model 3, indicating that the imputation method “pmm" has a better fitting effect in the data set in which the proportions of missing data = 0.05. When the missing data proportion increase to 0.4, using multiple imputations with the MICE algorithm (method “norm”) fits the model better than using the method ”pmm”.
+
+# 7. Conclusion
+
+The model which fits the data set completely contains the most information about the data, therefore the model interpretation is much better. In this case, the dataset with no missing data has the smallest standard error of its parameters, resulting in a more effective interpretation of the data.
+
+There are many ways to deal with missing data. Directly ignoring missing values and doing linear regression will remove any rows with missing values, resulting in a reduction in the data sample size. Especially when the proportion of missing data is large, there are fewer valid observations available (less information provided by the data set). In this case, The model exhibits poor fit and high standard errors of each parameters.
+
+By comparing the estimated values and standard errors of the parameters of each model, using the MICE missing value imputation method to the data set can get a better effect on the model fitting.
+
+Choosing the imputation method is important in datasets dealing with different proportions of missing data. In the case, the standard error of each parameters fitted by the data set generated by method “pmm” is smaller when the proportion of missing values is small. When the proportion of missing values increases (the number of complete observations decreases), the data set processed with method “norm” fits the model better. 
+
+
+# 8. References
+H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York,2016.
+
+Wickham H, François R, Henry L, Müller K, Vaughan D (2023). _dplyr: A Grammar of Data Manipulation_. R package version 1.1.0, https://CRAN.R-project.org/package=dplyr.
+
+Wickham H, Hester J, Bryan J (2023). _readr: Read Rectangular Text Data_. R package version 2.1.4, https://CRAN.R-project.org/package=readr.
+
+Auguie B (2017). _gridExtra: Miscellaneous Functions for "Grid" Graphics_. R package version 2.3, https://CRAN.R-project.org/package=gridExtra.
+
+Yihui Xie (2023). knitr: A General-Purpose Package for Dynamic Report Generation in R. R package version 1.42.
+
+Stef van Buuren, Karin Groothuis-Oudshoorn (2011). mice: Multivariate Imputation by Chained Equations in R. Journal of Statistical Software, 45(3), 1-67. DOI 10.18637/jss.v045.i03.
+
+Zhu H (2021). _kableExtra: Construct Complex Table with 'kable' and Pipe Syntax_. R package version 1.3.4, <https://CRAN.R-project.org/package=kableExtra>.
+
+
+
+
+
+
