@@ -18,6 +18,7 @@ The objective of this project is to compare the effectiveness of two different a
 - [Results](#6)
 - [Conclusion](#7)
 
+<a name="1"></a>
 ## Data
 SeoulBikeData ([databike.csv](https://github.com/atomxu10/MultipleImputation_MICE/blob/main/databike.csv)) is a dataset containing information about bike rentals in Seoul, South Korea. The dataset is provided by the Seoul Metropolitan Government, and there are 297 datasets in total, which can be used for data analysis and prediction.
 
@@ -32,6 +33,7 @@ The variables are :
 
 All variables data types are continuous.
 
+<a name="2"></a>
 ## Model (Multiple Linear Regression)
 Multiple Linear Regression is a regression analysis method used to establish a linear relationship between multiple independent variables and a dependent variable, and all variables are numerical variables. In this case, all variable categories are continuous, so linear regression can be used to explain the relationship between variables, RBC is defined as an independent variable, and the others are dependent variables. The regression model can be represented as:
 
@@ -43,6 +45,7 @@ where $\epsilon \sim N(0, \sigma^2)\$
 
 In the above formula, $Y_i$ is the value of the independent variable RBC, $X_{1i}$. . . $X_{6i}$ represent the values of the dependent variables TEMP, HUM, WS, VIS, DPT, SR respectively, and $\beta_1$. . . $\beta_6$ represent the coefficients of each dependent variable.
 
+<a name="3"></a>
 ## Exploratory data analysis
 After modifying the dataset to have missing data (proportions of missing data = 0.05), it can be seen that 208 observations are complete, accounting for 70% of the total data (Figure 1). Each variable in the data set has missing values, among which the variable with the most missing values is SR (20), and the least is VIS (10). Among all observations with missing values, there are 72 observations with missing single variables, accounting for 80.9%. There are 16 observations with two variables missing and 1 observation with three variables missing.
 
@@ -54,6 +57,7 @@ The missing data are completely random, which belongs to the MCAR type of missin
 
 <p align="center">Figure 1: Missing data pattern of the dataset</p>
 
+<a name="4"></a>
 ## Method
 **1. Fitting a benchmark model**
    
@@ -83,7 +87,8 @@ By checking the convergence of the MICE algorithm after using different methods,
 **6. Trying different proportions of missing data**
     
    Trying to change the proportions of missing values in step 2, repeat the steps from 3 to 5 to get new model parameters, and comparing the estimated values and standard errors of each parameter of each model.
-    
+
+<a name="5"></a>
 ## Convergence of the MICE algorithm
 
 When using multiple imputation with the MICE algorithm, checking converges can determine whether the number of iterations of the imputation and the number of imputations are sufficient. If there is no convergence, it means that the number of imputations and iterations needs to be increased. I will use the density plot as an example to check convergence.
@@ -101,6 +106,7 @@ Each variable has its own density curve, which roughly displays a normal distrib
 
 <p align="center">Figure 3: Density plots for each variable (m = 5,maxit = 20). the overlapping degree is higher so it is convergent</p>
 
+<a name="6"></a>
 ## Results
 Linear regression fit with different data sets:
 
@@ -127,6 +133,7 @@ Table 1 compares different imputation methods (“norm” and “pmm”), reveal
 
 However, as the proportion of missing data increases to 0.4, the situation changes. In this case, using multiple imputations with the MICE algorithm and the “norm” method results in a better model fit compared to using the “pmm” method. This demonstrates that while “pmm” is effective for lower proportions of missing data, the “norm” method becomes more reliable as the amount of missing data increases.
 
+<a name="7"></a>
 ## Conclusion
 
 The model that fits the complete dataset contains the most information about the data, resulting in superior model interpretation. In this scenario, the dataset with no missing data has the smallest standard errors for its parameters, leading to more effective data interpretation.
