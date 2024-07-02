@@ -54,6 +54,27 @@ The missing data are completely random, which belongs to the MCAR type of missin
 
 <p align="center">Figure 1: Missing data pattern of the dataset</p>
 
+## Method
+1. Fitting a benchmark model
+   The full data set (without missing values) is fitted with a linear regression model to obtain the estimated values and standard errors of each parameter. The model does not need to consider multicollinearity. It is only used for subsequent comparative analysis.
+
+2. Modifying the data set to have missing data
+
+   A seed number should be set so that missing data is constant to compare multiple models. Modifying the full data set according to 0.05 proportions of missing data, and generating a new data set (208 complete observations in the modified data set).
+
+3. Complete case analysis
+
+   Complete case analysis is a linear regression fitting using the modified data directly. During linear regression in R, observations with missing values would be removed. In this case, 89 observations will be deleted.
+
+4. Multiple imputation with the MICE algorithm
+   Multiple imputation with the MICE algorithm is a technique for imputing missing data that involves generating multiple datasets by using regression models to estimate missing values. The MICE algorithm is widely used because it can handle different types of variables and missing data patterns. The methods “norm” and “pmm” in the MICE package will be used.
+
+   - “norm” - Assuming the distribution of the data is a normal distribution and using the mean and variance to generate random values from that distribution.
+   - “pmm” - Missing values are assumed to have similar characteristics to other data points. When selecting similar data points, the difference between these data points and the missing value is calculated, and the value of the closest data point is selected according to the size of the difference to fill the missing value.
+
+By checking the convergence of the MICE algorithm after using different methods, we can get the number of imputations and iterations.
+
+
 
 
 
